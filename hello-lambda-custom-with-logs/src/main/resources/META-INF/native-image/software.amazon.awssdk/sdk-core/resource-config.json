@@ -1,0 +1,7 @@
+{
+  "resources":{
+  "includes":[
+    {"pattern":"\\Qsoftware/amazon/awssdk/global/handlers/execution.interceptors\\E"}
+  ]},
+  "bundles":[]
+}

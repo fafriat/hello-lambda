@@ -1,0 +1,7 @@
+[
+{
+  "name":"software.amazon.awssdk.http.urlconnection.UrlConnectionSdkHttpService",
+  "methods":[{"name":"<init>","parameterTypes":[] }],
+  "allPublicMethods":true
+}
+]

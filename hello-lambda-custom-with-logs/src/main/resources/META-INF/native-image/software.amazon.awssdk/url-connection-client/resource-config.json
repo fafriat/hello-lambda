@@ -1,0 +1,7 @@
+{
+  "resources":{
+  "includes":[
+    {"pattern":"\\QMETA-INF/services/software.amazon.awssdk.http.SdkHttpService\\E"} 
+  ]},
+  "bundles":[]
+}
