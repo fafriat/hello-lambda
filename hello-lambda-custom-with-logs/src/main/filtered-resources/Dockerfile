@@ -12,20 +12,16 @@ ENV PATH=/usr/lib/graalvm/bin:${PATH}
 ENV JAVA_HOME=/usr/lib/graalvm
 RUN yum install -y maven
 
-# compile the function
-ADD pom.xml .
-ADD src .
-ADD bootstrap .
-RUN mvn clean package -P !lambda-deployment-package
-
-
 WORKDIR /home/app
-COPY target/libs /home/app/libs
-COPY target/${project.artifactId}-${project.version}.jar /home/app/
-COPY bootstrap /home/app/
+# compile the function
+COPY pom.xml .
+COPY src src
+COPY bootstrap .
+RUN mvn clean package -P !lambda-deployment-package
+RUN native-image -jar target/${project.artifactId}-${project.version}.jar -H:Name=func --no-fallback
+
 # (Optional) Add Lambda Runtime Interface Emulator and use a script in the ENTRYPOINT for simpler local runs
-ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /home/app/aws-lambda-rie
-RUN native-image -jar ${project.artifactId}-${project.version}.jar -H:Name=func --no-fallback
+ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie .
 RUN yum install -y zip && yum clean all
 RUN chmod 755 aws-lambda-rie
 RUN chmod 755 bootstrap
