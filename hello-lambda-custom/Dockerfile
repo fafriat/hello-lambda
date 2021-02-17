@@ -13,16 +13,14 @@ ENV JAVA_HOME=/usr/lib/graalvm
 RUN yum install -y maven
 
 # compile the function
+WORKDIR /home/app
 ADD . .
 RUN mvn package 
 
-WORKDIR /home/app
-COPY target/libs /home/app/libs
-COPY target/hello-lambda-custom-1.0-SNAPSHOT.jar /home/app/
 COPY bootstrap /home/app/
 # (Optional) Add Lambda Runtime Interface Emulator and use a script in the ENTRYPOINT for simpler local runs
 ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /home/app/aws-lambda-rie
-RUN native-image -jar hello-lambda-custom-1.0-SNAPSHOT.jar -H:Name=func --no-fallback
+RUN native-image -jar target/hello-lambda-custom-1.0-SNAPSHOT.jar -H:Name=func --no-fallback
 RUN yum install -y zip && yum clean all
 RUN chmod 755 aws-lambda-rie
 RUN chmod 755 bootstrap
